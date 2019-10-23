@@ -1,0 +1,35 @@
+- name: Set VM password
+  set_fact:
+    vmss_vm_password: "{{ lookup('password', '/tmp/passwordfile chars=ascii_letters,digits,hexdigits,punctuation') }}"
+
+- name: Create VMSS
+  azure_rm_virtualmachinescaleset:
+    resource_group: "{{ rg_name }}"
+    location: "{{ vmss_vm_location | default('westeurope') }}"
+    load_balancer: "{{ vmss_lb_name }}"
+    name: "{{ vmss_name }}"
+    vm_size: "{{ vmss_vm_size | default('Standard_B2s') }}"
+    capacity: "{{ vmss_vm_count | default('1') }}"
+    upgrade_policy: "{{ vmss_upgrade_policy | default('Automatic') }}"
+    virtual_network_name: "{{ vn_name }}"
+    subnet_name: "{{ sn_name }}"
+    admin_username: "{{ vmss_vm_username | default('trueserver') }}"
+    admin_password: "{{ vmss_vm_password }}"
+    ssh_password_enabled: false
+    ssh_public_keys:
+      - path: "/home/{{ vmss_vm_username }}/.ssh/authorized_keys"
+        #key_data: "{{ lookup('file', '{{ ssh_key_file }}') }}"
+        key_data: "{{ ssh_key }}"
+    managed_disk_type: "{{ vmss_vm_disk_type | default('Premium_LRS') }}"
+    image:
+      offer: "{{ vmss_vm_offer | default('UbuntuServer') }}"
+      publisher: "{{ vmss_vm_publisher | default('Canonical') }}"
+      sku: "{{ vmss_vm_sku | default('18.04-LTS') }}"
+      version: latest
+  register: vmss
+  
+- name: Copy password to file
+  copy:
+    content: "{{ vmss_vm_username }} : {{ vmss_vm_password }}"
+    dest: "{{ vmss_name }}-password.txt"
+  when: vmss.changed
