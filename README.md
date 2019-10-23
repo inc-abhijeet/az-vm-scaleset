@@ -1,7 +1,7 @@
-# Ansible role: az-vm
-[![Build Status](https://travis-ci.org/rdvansloten/az-vm.svg?branch=master)](https://travis-ci.org/rdvansloten/az-vm)
+# Ansible role: az-vm-scaleset
+[![Build Status](https://travis-ci.org/rdvansloten/az-vm.svg?branch=master)](https://travis-ci.org/rdvansloten/az-vm-scaleset)
 
-az-vm is an Ansible role for deploying VMs to Microsoft Azure.
+az-vm-scaleset is an Ansible role for deploying VM Scalesets to Microsoft Azure.
 
 ## Requirements
 - Install [Python 3.x](https://www.python.org/downloads/)
@@ -14,7 +14,7 @@ az-vm is an Ansible role for deploying VMs to Microsoft Azure.
 Use [Ansible Galaxy](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) to install this role.
 
 ```bash
-ansible-galaxy install rdvansloten.az_vm
+ansible-galaxy install rdvansloten.az_vm_scaleset
 ```
 
 ## Variables
@@ -70,14 +70,6 @@ You can run the role using the following example playbook.
     nsg_name: "rdvanslotenvm-nsg01"
 
   roles:
-    - rdvansloten.az_resource_group
-    - rdvansloten.az_storage_account
-    - rdvansloten.az_public_ip
-    - rdvansloten.az_virtual_network
-    - rdvansloten.az_network_interface
-    - rdvansloten.az_network_security_group
-    - rdvansloten.az_vm
-    - rdvansloten.az_managed_disk
 ```
 
 ## Contributing
